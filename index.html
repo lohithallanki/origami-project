@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>origami.we</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --yellow:#ffeb00;
+  --yellow-light:#fff9c4;
+  --violet:#6a5acd;
+  --violet-dark:#4b3cc4;
+  --ink:#1a1a2e;
+  --white:#fff;
+}
+
+html{ scroll-behavior:smooth; }
+
+body{
+  background:var(--yellow);
+  color:var(--ink);
+  font-family:'DM Sans', sans-serif;
+}
+
+/* ── NAVBAR ── */
+nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 60px;
+  background:rgba(255,235,0,0.85);
+  backdrop-filter:blur(10px);
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 2px 20px rgba(0,0,0,0.08);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+}
+
+.brand-dot{
+  width:38px; height:38px;
+  background:var(--violet);
+  border-radius:50%;
+  display:grid; place-items:center;
+  font-size:20px;
+  box-shadow:0 4px 12px rgba(106,90,205,0.4);
+}
+
+.brand span{
+  font-family:'Playfair Display', serif;
+  font-size:1.5rem;
+  color:var(--violet);
+  font-weight:700;
+}
+
+nav ul{ display:flex; gap:10px; list-style:none; align-items:center; }
+
+nav a{
+  text-decoration:none;
+  color:var(--ink);
+  font-weight:600;
+  font-size:0.95rem;
+  padding:8px 16px;
+  border-radius:50px;
+  transition:background 0.2s;
+}
+
+nav a:hover{ background:rgba(106,90,205,0.1); }
+
+.nav-btn{
+  background:var(--violet) !important;
+  color:#fff !important;
+  box-shadow:0 4px 12px rgba(106,90,205,0.3);
+}
+
+.nav-btn:hover{ background:var(--violet-dark) !important; }
+
+#userGreeting{
+  font-weight:600;
+  color:var(--violet);
+  font-size:0.9rem;
+}
+
+/* ── HERO ── */
+.hero{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  padding:100px 60px 80px;
+  align-items:center;
+  min-height:85vh;
+}
+
+.hero-text{ animation: fadeUp 0.6s ease; }
+
+@keyframes fadeUp{
+  from{ opacity:0; transform:translateY(30px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.tag{
+  display:inline-block;
+  background:var(--violet);
+  color:#fff;
+  font-size:0.75rem;
+  font-weight:700;
+  padding:5px 14px;
+  border-radius:50px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  margin-bottom:20px;
+}
+
+.hero h1{
+  font-family:'Playfair Display', serif;
+  font-size:clamp(2.8rem, 5vw, 4.2rem);
+  line-height:1.1;
+  color:var(--ink);
+  margin-bottom:20px;
+}
+
+.hero h1 em{
+  font-style:italic;
+  color:var(--violet);
+}
+
+.hero p{
+  font-size:1.1rem;
+  line-height:1.7;
+  color:#444;
+  max-width:440px;
+  margin-bottom:36px;
+}
+
+.btn{
+  display:inline-block;
+  padding:14px 34px;
+  background:var(--violet);
+  color:#fff;
+  border:none;
+  border-radius:50px;
+  font-family:'DM Sans',sans-serif;
+  font-size:1rem;
+  font-weight:700;
+  text-decoration:none;
+  cursor:pointer;
+  transition:background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow:0 6px 20px rgba(106,90,205,0.3);
+}
+
+.btn:hover{
+  background:var(--violet-dark);
+  transform:translateY(-2px);
+  box-shadow:0 10px 28px rgba(106,90,205,0.4);
+}
+
+.hero-img{
+  position:relative;
+  animation: fadeUp 0.6s ease 0.15s both;
+}
+
+.hero-img img{
+  width:100%;
+  border-radius:32px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.18);
+  aspect-ratio:4/3;
+  object-fit:cover;
+}
+
+.hero-img::before{
+  content:'';
+  position:absolute;
+  inset:-12px;
+  border:3px dashed var(--violet);
+  border-radius:38px;
+  opacity:0.3;
+}
+
+/* ── STATS ── */
+.stats{
+  display:flex;
+  gap:40px;
+  margin-top:40px;
+}
+
+.stat span{
+  display:block;
+  font-family:'Playfair Display', serif;
+  font-size:2.2rem;
+  font-weight:900;
+  color:var(--violet);
+}
+
+.stat small{ font-size:0.85rem; color:#666; }
+
+/* ── PROJECTS ── */
+.projects{
+  padding:80px 60px;
+  background:linear-gradient(180deg, var(--yellow) 0%, #fffde7 100%);
+}
+
+.section-header{
+  text-align:center;
+  margin-bottom:70px;
+}
+
+.section-header h2{
+  font-family:'Playfair Display', serif;
+  font-size:2.8rem;
+  color:var(--ink);
+  margin-bottom:12px;
+}
+
+.section-header p{ color:#666; font-size:1rem; }
+
+.cards-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
+  gap:32px;
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.card{
+  background:#fff;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 10px 40px rgba(0,0,0,0.08);
+  transition:transform 0.25s, box-shadow 0.25s;
+  animation: fadeUp 0.5s ease both;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 20px 50px rgba(106,90,205,0.18);
+}
+
+.card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+
+.card-body{
+  padding:24px;
+}
+
+.card-body h3{
+  font-family:'Playfair Display', serif;
+  font-size:1.4rem;
+  color:var(--ink);
+  margin-bottom:10px;
+}
+
+.card-body p{
+  color:#666;
+  font-size:0.95rem;
+  line-height:1.6;
+  margin-bottom:18px;
+}
+
+.card-body .btn{
+  font-size:0.9rem;
+  padding:10px 24px;
+}
+
+/* ── FEEDBACK OVERLAY ── */
+#feedbackOverlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:radial-gradient(circle at 30% 20%, #fff3a0, #6a0dad);
+  place-items:center;
+}
+
+.feedback-card{
+  width:min(640px, 92vw);
+  padding:40px;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(16px);
+  border-radius:28px;
+  text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,0.2);
+  animation: rise 0.4s ease;
+}
+
+@keyframes rise{ from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
+
+.feedback-card img{
+  width:100px; height:100px;
+  border-radius:50%;
+  object-fit:cover;
+  margin-bottom:16px;
+  border:4px solid var(--violet);
+}
+
+.feedback-card h2{
+  font-family:'Playfair Display', serif;
+  font-size:1.8rem;
+  margin-bottom:24px;
+  color:var(--ink);
+}
+
+.feedback-form{ text-align:left; margin-bottom:20px; }
+
+.feedback-form input, .feedback-form textarea{
+  width:100%;
+  padding:12px 16px;
+  border:2px solid #e8e8f0;
+  border-radius:12px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.95rem;
+  margin-bottom:12px;
+  outline:none;
+  transition:border-color 0.2s;
+}
+
+.feedback-form input:focus, .feedback-form textarea:focus{
+  border-color:var(--violet);
+}
+
+.feedback-form textarea{ height:80px; resize:none; }
+
+.reaction-btns{
+  display:flex;
+  gap:16px;
+  justify-content:center;
+  margin-bottom:16px;
+}
+
+.reaction-btn{
+  flex:1;
+  padding:14px;
+  border:2px solid transparent;
+  border-radius:14px;
+  font-size:1.5rem;
+  cursor:pointer;
+  background:#f5f5ff;
+  transition:all 0.2s;
+  font-family:'DM Sans',sans-serif;
+}
+
+.reaction-btn.selected{ border-color:var(--violet); background:#ede9ff; }
+.reaction-btn:hover{ transform:scale(1.05); }
+
+.feedback-submit{
+  width:100%;
+  padding:14px;
+  background:var(--violet);
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  font-family:'DM Sans',sans-serif;
+  font-size:1rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+
+.feedback-submit:hover{ background:var(--violet-dark); }
+
+.feedback-result{ display:none; }
+.feedback-result h2{ font-size:2.5rem; margin-bottom:12px; }
+
+#closeFeedback{
+  margin-top:20px;
+  background:transparent;
+  border:2px solid var(--violet);
+  color:var(--violet);
+  padding:10px 28px;
+  border-radius:50px;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+
+#closeFeedback:hover{ background:var(--violet); color:#fff; }
+
+canvas.confetti-layer{
+  position:fixed; inset:0;
+  pointer-events:none; z-index:99999;
+}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;
+  padding:28px;
+  background:#1a1a2e;
+  color:rgba(255,255,255,0.6);
+  font-size:0.9rem;
+}
+
+footer strong{ color:var(--yellow); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:880px){
+  nav{ padding:16px 24px; }
+  .hero{ grid-template-columns:1fr; padding:60px 24px; min-height:auto; gap:40px; }
+  .hero-img::before{ display:none; }
+  .projects{ padding:60px 24px; }
+  .cards-grid{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="brand">
+    <div class="brand-dot">🌸</div>
+    <span>origami.we</span>
+  </a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a id="openFeedback" style="cursor:pointer">Feedback</a></li>
+    <li id="authNav"><a href="login.html" class="nav-btn">Sign In</a></li>
+    <li id="userNav" style="display:none">
+      <span id="userGreeting"></span>
+      <a href="#" onclick="logout()" style="margin-left:10px;color:#e53e3e;font-size:0.85rem;">Logout</a>
+    </li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="tag">✦ The Art of Paper</div>
+    <h1>Where Paper Folds into <em>Imagination</em></h1>
+    <p>Origami transforms a simple sheet of paper into something beautiful. Discover our step-by-step guides and fold your own masterpiece.</p>
+    <a href="#projects" class="btn">Explore Projects ↓</a>
+
+    <div class="stats">
+      <div class="stat"><span>5</span><small>Origami Projects</small></div>
+      <div class="stat"><span>∞</span><small>Possibilities</small></div>
+      <div class="stat"><span>0¢</span><small>Just paper & patience</small></div>
+    </div>
+  </div>
+  <div class="hero-img">
+    <img src="https://i.ibb.co/mVXf9cpX/premium-photo-1664910687621-05c21e977bd0.avif" alt="Origami art">
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="projects">
+  <div class="section-header">
+    <h2>Featured Projects</h2>
+    <p>Pick a model and follow the folding steps</p>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card" style="animation-delay:0.05s">
+      <img src="https://content.instructables.com/FOA/P5DD/L0TKT1KB/FOAP5DDL0TKT1KB.jpg" alt="Bird">
+      <div class="card-body">
+        <h3>Origami Bird 🐦</h3>
+        <p>A classic flapping bird — fun, quick, and a great starter project for any folder.</p>
+        <a href="bird.html" class="btn">View Steps</a>
+      </div>
+    </div>
+
+    <div class="card" style="animation-delay:0.1s">
+      <img src="https://www.origamiway.com/wp-content/uploads/2024/09/Origami-Heart-Final.png.webp" alt="Heart">
+      <div class="card-body">
+        <h3>Origami Heart ❤️</h3>
+        <p>A sweet paper heart — perfect to fold and gift to someone you care about.</p>
+        <a href="heart.html" class="btn">View Steps</a>
+      </div>
+    </div>
+
+    <div class="card" style="animation-delay:0.15s">
+      <img src="https://origami.me/wp-content/uploads/2010/05/origami-elephants.jpg" alt="Elephant">
+      <div class="card-body">
+        <h3>Origami Elephant 🐘</h3>
+        <p>An iconic origami animal that's surprisingly satisfying once you nail the trunk.</p>
+        <a href="elephant.html" class="btn">View Steps</a>
+      </div>
+    </div>
+
+    <div class="card" style="animation-delay:0.2s">
+      <img src="https://origami.me/wp-content/uploads/2024/07/easy-origami-swan-1.jpg" alt="Swan">
+      <div class="card-body">
+        <h3>Origami Swan 🦢</h3>
+        <p>Elegant, graceful, and deceptively easy — the swan is a timeless paper model.</p>
+        <a href="swan.html" class="btn">View Steps</a>
+      </div>
+    </div>
+
+    <div class="card" style="animation-delay:0.25s">
+      <img src="https://origami.me/wp-content/uploads/2010/05/origami-goldfish.jpg" alt="Goldfish">
+      <div class="card-body">
+        <h3>Origami Goldfish 🐠</h3>
+        <p>A traditional Japanese model with a playful charm — fold a whole pond's worth!</p>
+        <a href="goldfish.html" class="btn">View Steps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEEDBACK OVERLAY -->
+<section id="feedbackOverlay">
+  <canvas class="confetti-layer" id="confettiCanvas"></canvas>
+
+  <div class="feedback-card">
+    <img src="https://i.ibb.co/MkYrxhy2/pexels-vip-foto-8544468.jpg" alt="Logo">
+
+    <div id="feedbackForm">
+      <h2>How are we doing?</h2>
+      <div class="reaction-btns">
+        <button class="reaction-btn" id="likeBtn" onclick="selectLike(true)">👍 Loved it</button>
+        <button class="reaction-btn" id="dislikeBtn" onclick="selectLike(false)">👎 Needs work</button>
+      </div>
+      <div class="feedback-form">
+        <input type="text" id="fbName" placeholder="Your name (optional)">
+        <textarea id="fbMessage" placeholder="Tell us more… (optional)"></textarea>
+      </div>
+      <button class="feedback-submit" onclick="submitFeedback()">Send Feedback 🎉</button>
+      <br>
+      <button id="closeFeedback" style="margin-top:12px" onclick="closeFeedbackOverlay()">← Back</button>
+    </div>
+
+    <div class="feedback-result" id="feedbackResult">
+      <div style="font-size:4rem">🎉</div>
+      <h2>Thank you!</h2>
+      <p>Your feedback means the world to us.</p>
+      <button id="closeFeedback" onclick="closeFeedbackOverlay()" style="margin-top:20px;background:transparent;border:2px solid var(--violet);color:var(--violet);padding:10px 28px;border-radius:50px;font-family:DM Sans,sans-serif;font-weight:700;cursor:pointer;">← Back to site</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 <strong>origami.we</strong> — Folding minds, beautifully.</p>
+</footer>
+
+<script>
+const API = 'http://localhost:3000/api';
+
+// ── Auth state ──
+function getUser() {
+  try { return JSON.parse(localStorage.getItem('origami_user')); } catch { return null; }
+}
+function getToken() { return localStorage.getItem('origami_token'); }
+function logout() {
+  localStorage.removeItem('origami_token');
+  localStorage.removeItem('origami_user');
+  window.location.reload();
+}
+
+(function initAuth() {
+  const user = getUser();
+  if (user) {
+    document.getElementById('authNav').style.display = 'none';
+    document.getElementById('userNav').style.display = 'flex';
+    document.getElementById('userGreeting').textContent = `Hi, ${user.name} 👋`;
+  }
+})();
+
+// ── Feedback overlay ──
+let liked = null;
+
+document.getElementById('openFeedback').onclick = (e) => {
+  e.preventDefault();
+  document.getElementById('feedbackOverlay').style.display = 'grid';
+  document.body.style.overflow = 'hidden';
+};
+
+function closeFeedbackOverlay() {
+  document.getElementById('feedbackOverlay').style.display = 'none';
+  document.body.style.overflow = 'auto';
+  // reset
+  liked = null;
+  document.getElementById('feedbackForm').style.display = 'block';
+  document.getElementById('feedbackResult').style.display = 'none';
+  document.getElementById('fbName').value = '';
+  document.getElementById('fbMessage').value = '';
+  document.querySelectorAll('.reaction-btn').forEach(b => b.classList.remove('selected'));
+}
+
+function selectLike(val) {
+  liked = val;
+  document.getElementById('likeBtn').classList.toggle('selected', val === true);
+  document.getElementById('dislikeBtn').classList.toggle('selected', val === false);
+}
+
+async function submitFeedback() {
+  if (liked === null) {
+    alert('Please select 👍 or 👎 first!');
+    return;
+  }
+  const name = document.getElementById('fbName').value.trim();
+  const message = document.getElementById('fbMessage').value.trim();
+
+  try {
+    await fetch(`${API}/feedback`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(getToken() ? { 'Authorization': `Bearer ${getToken()}` } : {})
+      },
+      body: JSON.stringify({ name, liked, message })
+    });
+  } catch(e) {
+    // If backend isn't running, we still show success UX
+  }
+
+  document.getElementById('feedbackForm').style.display = 'none';
+  document.getElementById('feedbackResult').style.display = 'block';
+
+  // Confetti!
+  const canvas = document.getElementById('confettiCanvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const fire = confetti.create(canvas, { resize: true });
+  fire({ particleCount: 300, spread: 140, origin: { y: 0.6 } });
+}
+</script>
+
+</body>
+</html>
